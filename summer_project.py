@@ -18,9 +18,6 @@ st.set_page_config(page_title="Inventory Dashboard", layout="wide")
 
 # engine = create_engine("postgresql+psycopg2://postgres:achla1407@localhost:5432/Inventory_Management")
 engine = create_engine("postgresql+psycopg2://postgres:[achla1407]@db.dckmjzlsjlevopkjkfcr.supabase.co:5432/postgres")
-
-
-# --------------------------
 # LOAD DATA
 # --------------------------
 @st.cache_data
