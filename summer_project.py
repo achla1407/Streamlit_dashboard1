@@ -16,7 +16,8 @@ st.set_page_config(page_title="Inventory Dashboard", layout="wide")
 # def get_engine():
 #     return create_engine(st.secrets["Inventory_Management"]["url"])
 
-engine = create_engine("postgresql+psycopg2://postgres:achla1407@localhost:5432/Inventory_Management")
+# engine = create_engine("postgresql+psycopg2://postgres:achla1407@localhost:5432/Inventory_Management")
+engine = create_engine("postgresql://postgres:[achla1407]@db.dckmjzlsjlevopkjkfcr.supabase.co:5432/postgres")
 
 
 # --------------------------
