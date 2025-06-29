@@ -1,1 +1,1 @@
-MY First StreamLit Project 
+ StreamLit Project 
