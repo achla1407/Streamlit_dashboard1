@@ -43,7 +43,19 @@ WHERE
 ORDER BY
   s.store_id,
   s.inventory_level;
----Stock out rates
+--RECOMENDATION based on demand_Forecast
+SELECT
+    product_id,
+    inventory_level,
+    demand_forecast,
+    CASE
+        WHEN inventory_level = 0 THEN 'URGENT Reorder'
+        WHEN inventory_level > 2 * demand_forecast THEN 'Reduce Holding'
+        WHEN inventory_level < demand_forecast THEN 'Reorder Soon'
+        ELSE 'Stock OK'
+    END AS recommendation
+FROM
+   summerproject;
 
 
   
