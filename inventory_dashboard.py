@@ -7,8 +7,6 @@ import plotly.express as px
 st.set_page_config(page_title="Inventory Dashboard", layout='wide')
 st.title("INVENTORY DASHBOARD")
 
-from supabase import create_client
-
 url = st.secrets["supabase"]["url"]
 key = st.secrets["supabase"]["key"]
 supabase = create_client(url, key)
@@ -39,15 +37,6 @@ def load_data():
         st.error(f"❌ Supabase error: {e}")
         return pd.DataFrame()
 
-# # Setup Supabase Client
-# supabase = create_client(st.secrets["supabase"]["url"], st.secrets["supabase"]["key"])
-
-# @st.cache_data
-# def load_data():
-#     response = supabase.table("summerproject").select("*").execute()
-#     df = pd.DataFrame(response.data)
-#     return df
-
 df = load_data()
 
 st.sidebar.header("Filter Data")
@@ -59,7 +48,7 @@ selected_product = st.sidebar.selectbox("Select Product", products)
 
 filtered_df = df[(df['store_id'] == selected_store) & (df['product_id'] == selected_product)]
 
-# --------------------------
+
 # KPIs
 # --------------------------
 latest_date = df['date'].max()
@@ -76,7 +65,7 @@ col1.metric("Stockout Rate", f"{stockout_rate:.2f}%")
 col2.metric("Avg Inventory", f"{avg_inventory:.0f} units")
 col3.metric("Avg Inventory Age", f"{avg_stock_age:.0f} days")
 
-# --------------------------
+
 # FAST vs SLOW MOVING PRODUCTS
 # --------------------------
 sales_by_product = df.groupby('product_id')['units_sold'].sum().reset_index()
@@ -89,7 +78,7 @@ st.subheader("Fast vs Slow Moving Products")
 fig = px.bar(sales_by_product, x='product_id', y='units_sold', color='movement', title="Product Movement Classification")
 st.plotly_chart(fig, use_container_width=True)
 
-# --------------------------
+
 # INVENTORY LEVEL TREND
 # --------------------------
 st.subheader("Inventory Level Trend")
@@ -97,7 +86,6 @@ inventory_trend = filtered_df.groupby('date')['inventory_level'].mean().reset_in
 fig2 = px.line(inventory_trend, x='date', y='inventory_level', title="Avg Inventory Level Over Time")
 st.plotly_chart(fig2, use_container_width=True)
 
-# --------------------------
 # STOCK ADJUSTMENT RECOMMENDATIONS
 # --------------------------
 def recommend(row):
