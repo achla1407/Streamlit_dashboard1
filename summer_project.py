@@ -6,7 +6,8 @@ from sqlalchemy import create_engine
 # --------------------------
 # CONFIGURATION
 # --------------------------
-st.set_page_config(page_title="Inventory Dashboard", layout="wide")
+st.set_page_config(page_title="Inventory Dashboard",layout='wide')
+st.title("INVENTORY DASHBOARD")
 
 # --------------------------
 # DATABASE CONNECTION (PostgreSQL)
@@ -16,9 +17,10 @@ st.set_page_config(page_title="Inventory Dashboard", layout="wide")
 # def get_engine():
 #     return create_engine(st.secrets["Inventory_Management"]["url"])
 
-# engine = create_engine("postgresql+psycopg2://postgres:achla1407@localhost:5432/Inventory_Management")
-engine = create_engine("postgresql+psycopg2://postgres:[achla1407]@db.dckmjzlsjlevopkjkfcr.supabase.co:5432/postgres")
-# LOAD DATA
+# # engine = create_engine("postgresql+psycopg2://postgres:achla1407@localhost:5432/Inventory_Management")
+# engine = create_engine("postgresql+psycopg2://postgres.dckmjzlsjlevopkjkfcr:2004achalaP1@aws-0-ap-south-1.pooler.supabase.com:5432/postgres")
+engine = create_engine("postgresql+psycopg2://postgres.dckmjzlsjlevopkjkfcr:2004achalaP1@aws-0-ap-south-1.pooler.supabase.com:5432/postgres")
+# # LOAD DATA
 # --------------------------
 @st.cache_data
 def load_data():
@@ -44,6 +46,8 @@ filtered_df = df[(df['store_id'] == selected_store) & (df['product_id'] == selec
 # --------------------------
 latest_date = df['date'].max()
 latest_df = df[df['date'] == latest_date]
+df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
+
 
 stockout_rate = (df[df['inventory_level'] == 0].shape[0] / df.shape[0]) * 100
 avg_inventory = df['inventory_level'].mean()
