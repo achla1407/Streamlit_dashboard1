@@ -19,7 +19,7 @@ def load_data():
         all_data = []
 
         while True:
-            response = supabase.table("summerproject").select("*").range(offset, offset + page_size - 1).execute()
+            response = supabase.table("Inventory").select("*").range(offset, offset + page_size - 1).execute()
             batch = response.data
 
             if not batch:
@@ -29,7 +29,7 @@ def load_data():
             offset += page_size
 
         df = pd.DataFrame(all_data)
-        # df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
+        df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_")
         st.success(f"✅ Supabase loaded: {df.shape[0]} rows")
         return df
 
@@ -38,6 +38,7 @@ def load_data():
         return pd.DataFrame()
 
 df = load_data()
+print(df.columns)
 
 st.sidebar.header("Filter Data")
 stores = df['store_id'].dropna().unique()
@@ -51,9 +52,10 @@ filtered_df = df[(df['store_id'] == selected_store) & (df['product_id'] == selec
 
 # KPIs
 # --------------------------
+df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
 latest_date = df['date'].max()
 latest_df = df[df['date'] == latest_date]
-df['date'] = pd.to_datetime(df['date'], dayfirst=True, errors='coerce')
+
 
 
 stockout_rate = (df[df['inventory_level'] == 0].shape[0] / df.shape[0]) * 100
